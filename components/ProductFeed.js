@@ -15,6 +15,7 @@ function ProductFeed({ products }) {
             price={price}
             title={title}
             key={id}
+            id={id}
           />
         ))}
       <img
@@ -33,6 +34,7 @@ function ProductFeed({ products }) {
               price={price}
               title={title}
               key={id}
+              id={id}
             />
           ))}
       </div>
@@ -46,6 +48,7 @@ function ProductFeed({ products }) {
             price={price}
             title={title}
             key={id}
+            id={id}
           />
         ))}
     </div>

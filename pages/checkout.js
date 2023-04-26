@@ -1,13 +1,17 @@
 import Header from "@/components/Header";
-import { selectItems } from "@/slices/basketSlice";
+import { selectItems, selectTotal } from "@/slices/basketSlice";
 import Image from "next/image";
 import React from "react";
 import { useSelector } from "react-redux";
 import CheckoutProduct from "@/components/CheckoutProduct";
-
+import { signIn, signOut, useSession } from "next-auth/react";
+import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
+import * as CurrencyFormat from "react-currency-format";
 
 function Chekout() {
-  const items = useSelector(selectItems)
+  const items = useSelector(selectItems);
+  const { data: session } = useSession();
+  const total = useSelector(selectTotal)
   return (
     <div className="bg-gray-100">
       <Header />
@@ -22,25 +26,51 @@ function Chekout() {
           />
           <div className="flex flex-col p-5 space-y-10 bg-white">
             <h1 className="text-3xl border-b pb-4">
-              {items.length === 0? 'Your basket is empty' : 'Your Shopping basket'}
+              {items.length === 0
+                ? "Your basket is empty"
+                : "Your Shopping basket"}
             </h1>
-            {
-              items.map((item, i) => (
-                <CheckoutProduct key={i} id={item.id}
-                  title={item.title}
-                  rating={item.rating}
-                  price={item.price}
-                  description={item.description}
-                  category={item.category}
-                  image={item.image}
-                  hasPrime={item.hasPrime}
-                />
-              ))
-            }
+            {items.map((item, i) => (
+              <CheckoutProduct
+                key={i}
+                id={item.id}
+                title={item.title}
+                rating={item.rating}
+                price={item.price}
+                description={item.description}
+                category={item.category}
+                image={item.image}
+                hasPrime={item.hasPrime}
+              />
+            ))}
           </div>
         </div>
 
         {/* Right */}
+        <div className="flex flex-col bg-white p-10 shadow-md">
+          {items.length > 0 && (
+            <>
+              <h2 className="whitespace-nowrap">
+                Subtotal ({items.length} items):
+                <span className="font-bold">
+                  <div className="flex mb-5 space-x-3">
+                    <CurrencyDollarIcon className="h-5" />
+                    <CurrencyFormat
+                      value={total}
+                      className="bg-gray-50"
+                      thousandSeparator={true}
+                      disabled 
+                    />
+                  </div>
+                </span>
+              </h2>
+
+              <button disabled={!session} className={`button mt-2 ${!session && 'from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed'}`}>
+                {!session ? 'Sign in to checkout': 'Proceed for payment'}
+              </button>
+            </>
+          )}
+        </div>
       </main>
     </div>
   );

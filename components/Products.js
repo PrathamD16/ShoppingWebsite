@@ -26,10 +26,7 @@ function Products({ category, description, image, price, title, id }) {
       price,
       title,
       id,
-      hasPrime,
-      rating,
     };
-
     //sending product as an action to REDUX store.... the basket
     dispatch(addToBasket(product));
   };

@@ -5,7 +5,7 @@ import ProductFeed from "../components/ProductFeed";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function Home({}) {
+export default function Home() {
   const [products, setProducts] = useState([])
   useEffect(() => {
     async function fetchData(){
@@ -15,7 +15,8 @@ export default function Home({}) {
 
     fetchData()
 
-  })
+  },[])
+  console.log(products)
   return (
     <div className="bg-gray-100">
       <Head>
