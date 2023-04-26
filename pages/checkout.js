@@ -7,11 +7,23 @@ import CheckoutProduct from "@/components/CheckoutProduct";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
 import * as CurrencyFormat from "react-currency-format";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(process.env.stripe_public_key);
 
 function Chekout() {
   const items = useSelector(selectItems);
   const { data: session } = useSession();
-  const total = useSelector(selectTotal)
+  const total = useSelector(selectTotal);
+
+  const createCheckoutSession = async () => {
+    const stripe = await stripePromise;
+    
+    //Call backend to create checkout session
+    
+
+  };
+
   return (
     <div className="bg-gray-100">
       <Header />
@@ -59,14 +71,22 @@ function Chekout() {
                       value={total}
                       className="bg-gray-50"
                       thousandSeparator={true}
-                      disabled 
+                      disabled
                     />
                   </div>
                 </span>
               </h2>
 
-              <button disabled={!session} className={`button mt-2 ${!session && 'from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed'}`}>
-                {!session ? 'Sign in to checkout': 'Proceed for payment'}
+              <button
+                role="link"
+                disabled={!session}
+                className={`button mt-2 ${
+                  !session &&
+                  "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"
+                }`}
+                onClick={createCheckoutSession}
+              >
+                {!session ? "Sign in to checkout" : "Proceed for payment"}
               </button>
             </>
           )}
