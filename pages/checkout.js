@@ -8,6 +8,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
 import * as CurrencyFormat from "react-currency-format";
 import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
 
 const stripePromise = loadStripe(process.env.stripe_public_key);
 
@@ -18,10 +19,21 @@ function Chekout() {
 
   const createCheckoutSession = async () => {
     const stripe = await stripePromise;
-    
-    //Call backend to create checkout session
-    
 
+    //Call backend to create checkout session
+    const checkoutSession = await axios.post("api/create-checkout-session", {
+      items: items,
+      email: session.user.email,
+    });
+
+    //redirect user to checkout page.
+    // const result = await stripe.redirectToCheckout({
+    //   sessionId: checkoutSession.data.id,
+    // });
+
+    // if (result.error) {
+    //   alert(result.error.message);
+    // }
   };
 
   return (
