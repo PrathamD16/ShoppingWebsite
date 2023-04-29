@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/solid";
-import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
+import { CurrencyRupeeIcon } from "@heroicons/react/24/solid";
 import * as CurrencyFormat from "react-currency-format";
 import { useDispatch } from "react-redux";
 import { addToBasket } from "@/slices/basketSlice";
@@ -59,7 +59,7 @@ function Products({ category, description, image, price, title, id }) {
       <div className="text-xs my-2 line-clamp-6">{description}</div>
 
       <div className="flex mb-5 space-x-3">
-        <CurrencyDollarIcon className="h-5" />
+        <CurrencyRupeeIcon className="h-5" />
         <CurrencyFormat
           className="bg-gray-50"
           value={price}

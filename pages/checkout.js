@@ -5,12 +5,12 @@ import React from "react";
 import { useSelector } from "react-redux";
 import CheckoutProduct from "@/components/CheckoutProduct";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
+import { CurrencyDollarIcon, CurrencyRupeeIcon } from "@heroicons/react/24/solid";
 import * as CurrencyFormat from "react-currency-format";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 
-const stripePromise = loadStripe(process.env.stripe_public_key);
+const stripePromise = loadStripe(process.env.stripe_public_key)
 
 function Chekout() {
   const items = useSelector(selectItems);
@@ -21,20 +21,20 @@ function Chekout() {
     const stripe = await stripePromise;
 
     //Call backend to create checkout session
-    const checkoutSession = await axios.post("api/create-checkout-session", {
+    const checkoutSession = await axios.post("/api/create-checkout-session", {
       items: items,
       email: session.user.email,
     });
 
-    //redirect user to checkout page.
-    // const result = await stripe.redirectToCheckout({
-    //   sessionId: checkoutSession.data.id,
-    // });
+    // redirect user to checkout page.
+    const result = await  stripe.redirectToCheckout({
+      sessionId: checkoutSession.data.id,
+    });
 
-    // if (result.error) {
-    //   alert(result.error.message);
-    // }
-  };
+    if (result.error) {
+      alert(result.error.message);
+    }
+  };  
 
   return (
     <div className="bg-gray-100">
@@ -78,7 +78,7 @@ function Chekout() {
                 Subtotal ({items.length} items):
                 <span className="font-bold">
                   <div className="flex mb-5 space-x-3">
-                    <CurrencyDollarIcon className="h-5" />
+                    <CurrencyRupeeIcon className="h-5" />
                     <CurrencyFormat
                       value={total}
                       className="bg-gray-50"
@@ -90,7 +90,6 @@ function Chekout() {
               </h2>
 
               <button
-                role="link"
                 disabled={!session}
                 className={`button mt-2 ${
                   !session &&
